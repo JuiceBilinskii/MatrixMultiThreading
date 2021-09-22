@@ -11,9 +11,9 @@ def convert_matrix_to_triangular(matrix: np.ndarray) -> np.ndarray:
     size = len(new_matrix)
     for fd in range(size):
         for i in range(fd + 1, size):
-            scale = -new_matrix[i, fd] / new_matrix[fd, fd]
+            scale = new_matrix[i, fd] / new_matrix[fd, fd]
             for j in range(size):
-                new_matrix[i, j] = new_matrix[fd, j] * scale + new_matrix[i, j]
+                new_matrix[i, j] = new_matrix[fd, j] * scale - new_matrix[i, j]
     return new_matrix
 
 
@@ -38,5 +38,6 @@ determinant = calculate_determinant_of_triangular_matrix(AM)
 end_time = time.time()
 
 print(f'It took {end_time - start_time} seconds')
+
 print(f'Determinant: {determinant}')
 # print(f'Numpy determinant: {np.linalg.det(A)}')
