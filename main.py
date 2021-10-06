@@ -3,17 +3,30 @@ import time
 import threading
 
 
+def convert_row(matrix, matrix_row, focus_diagonal, size):
+    scale = matrix[matrix_row, focus_diagonal] / matrix[focus_diagonal, focus_diagonal]
+    for j in range(focus_diagonal, size):
+        matrix[matrix_row, j] = matrix[focus_diagonal, j] * scale - matrix[matrix_row, j]
+
+
 def create_squared_matrix(size: int, low: float, high: float) -> np.ndarray:
     return np.random.uniform(low, high, size=(size, size))
 
 
-def convert_matrix_to_triangular(matrix: np.ndarray) -> None:
+def convert_matrix_to_triangular(matrix: np.ndarray) -> np.ndarray:
     size = len(matrix)
     for focus_diagonal in range(size):
+        threads = []
         for i in range(focus_diagonal + 1, size):
-            scale = matrix[i, focus_diagonal] / matrix[focus_diagonal, focus_diagonal]
-            for j in range(focus_diagonal, size):
-                matrix[i, j] = matrix[focus_diagonal, j] * scale - matrix[i, j]
+            threads.append(threading.Thread(target=convert_row, args=(matrix, i, focus_diagonal, size)))
+
+        for thread in threads:
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+
+    return matrix
 
 
 def calculate_determinant_of_triangular_matrix(triangular_matrix: np.ndarray) -> float:
@@ -25,15 +38,16 @@ def calculate_determinant_of_triangular_matrix(triangular_matrix: np.ndarray) ->
 
 
 if __name__ == '__main__':
-    matrix_size = 40
-    left_scope, right_scope = -1, 1
+    matrix_size = 140
+    left_scope, right_scope = -1.0, 1.0
 
-    test_squared_matrix = create_squared_matrix(matrix_size, left_scope, right_scope)
-    matrix_copy = test_squared_matrix.copy()
+    squared_matrix = create_squared_matrix(matrix_size, left_scope, right_scope)
+    matrix_copy = squared_matrix.copy()
 
     start_time = time.time()
-    convert_matrix_to_triangular(test_squared_matrix)
-    determinant = calculate_determinant_of_triangular_matrix(test_squared_matrix)
+
+    triangular_matrix = convert_matrix_to_triangular(squared_matrix)
+    determinant = calculate_determinant_of_triangular_matrix(triangular_matrix)
 
     end_time = time.time()
 
