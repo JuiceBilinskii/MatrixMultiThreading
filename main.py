@@ -13,7 +13,7 @@ def create_squared_matrix(size: int, low: float, high: float) -> np.ndarray:
     return np.random.uniform(low, high, size=(size, size))
 
 
-def convert_matrix_to_triangular(matrix: np.ndarray) -> np.ndarray:
+def convert_matrix_to_triangular(matrix: np.ndarray) -> None:
     size = len(matrix)
     for focus_diagonal in range(size):
         threads = []
@@ -26,7 +26,14 @@ def convert_matrix_to_triangular(matrix: np.ndarray) -> np.ndarray:
         for thread in threads:
             thread.join()
 
-    return matrix
+
+def iteration_convert_matrix_to_triangular(matrix: np.ndarray) -> None:
+    size = len(matrix)
+    for fd in range(size):
+        for i in range(fd + 1, size):
+            scale = matrix[i, fd] / matrix[fd, fd]
+            for j in range(fd, size):
+                matrix[i, j] = matrix[fd, j] * scale - matrix[i, j]
 
 
 def calculate_determinant_of_triangular_matrix(triangular_matrix: np.ndarray) -> float:
@@ -45,13 +52,18 @@ if __name__ == '__main__':
     matrix_copy = squared_matrix.copy()
 
     start_time = time.time()
-
-    triangular_matrix = convert_matrix_to_triangular(squared_matrix)
-    determinant = calculate_determinant_of_triangular_matrix(triangular_matrix)
-
+    convert_matrix_to_triangular(squared_matrix)
     end_time = time.time()
 
     print(f'It took {end_time - start_time} seconds')
+
+    start_time = time.time()
+    iteration_convert_matrix_to_triangular(matrix_copy)
+    end_time = time.time()
+
+    print(f'It took {end_time - start_time} seconds')
+
+    determinant = calculate_determinant_of_triangular_matrix(squared_matrix)
 
     print(f'Determinant: {determinant}')
     print(f'Numpy determinant: {np.linalg.det(matrix_copy)}')
