@@ -11,6 +11,7 @@ def convert_rows(focus_row: np.ndarray, matrix_slice: np.ndarray, focus_diagonal
             matrix_slice[i, j] = focus_row[j] * scale - matrix_slice[i, j]
     return matrix_slice
 
+
 def convert_matrix_to_triangular_multiprocess(matrix: np.ndarray, number_of_processes=2) -> np.ndarray:
     size = len(matrix)
 
@@ -20,9 +21,8 @@ def convert_matrix_to_triangular_multiprocess(matrix: np.ndarray, number_of_proc
             row_scopes = [(round(i * step + focus_diagonal + 1), round((i + 1) * step + focus_diagonal + 1)) 
                           for i in range(number_of_processes)]
 
-            _arguments = ((matrix[focus_diagonal], matrix[start_row:end_row], focus_diagonal) for start_row, end_row in row_scopes)
-            arguments = ((matrix, start_row, end_row, focus_diagonal) for start_row, end_row in row_scopes)
-            matrices = pool.starmap(convert_rows, _arguments)
+            arguments = ((matrix[focus_diagonal], matrix[start_row:end_row], focus_diagonal) for start_row, end_row in row_scopes)
+            matrices = pool.starmap(convert_rows, arguments)
 
             converted_rows = reduce(lambda first_arr, second_arr: np.concatenate((first_arr, second_arr)), matrices)
             matrix = np.concatenate((matrix[:focus_diagonal + 1], converted_rows))

@@ -28,7 +28,7 @@ def test_minor_method():
 
 
 def test_gaussian_method():
-    matrix_size = 300
+    matrix_size = 700
     left_scope, right_scope = -1.0, 1.0
 
     initial_matrix = utils.create_squared_matrix(matrix_size, left_scope, right_scope)
