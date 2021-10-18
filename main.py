@@ -28,7 +28,7 @@ def test_minor_method():
 
 
 def test_gaussian_method():
-    matrix_size = 30
+    matrix_size = 300
     left_scope, right_scope = -1.0, 1.0
 
     initial_matrix = utils.create_squared_matrix(matrix_size, left_scope, right_scope)
@@ -50,7 +50,7 @@ def test_gaussian_method():
     print(f'Single process execution time: {end_time - start_time} seconds')
     print(f'Determinant: {determinant}\n')
 
-    print(f'Numpy determinant: {numpy_method.calculate_numpy_matrix_determinant(matrix_b)}')
+    print(f'Numpy determinant: {numpy_method.calculate_numpy_matrix_determinant(initial_matrix)}')
 
 
 if __name__ == '__main__':
