@@ -25,7 +25,7 @@ def calculate_determinant_of_triangular_matrix(triangular_matrix: np.ndarray) ->
     return product
 
 
-matrix_size = 800
+matrix_size = 100
 left_scope, right_scope = -1.0, 1.0
 
 A = create_squared_matrix(matrix_size, left_scope, right_scope)
@@ -37,7 +37,9 @@ determinant = calculate_determinant_of_triangular_matrix(AM)
 
 end_time = time.time()
 
-print(f'It took {end_time - start_time} seconds')
+print(f'Matrix size: {matrix_size}')
+print(A)
+print(f'Execution time: {end_time - start_time} seconds')
 
 print(f'Determinant: {determinant}')
 print(f'Numpy determinant: {np.linalg.det(A)}')
