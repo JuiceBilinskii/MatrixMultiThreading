@@ -7,14 +7,13 @@ def create_squared_matrix(size: int, low: float, high: float) -> np.ndarray:
 
 
 def convert_matrix_to_triangular(matrix: np.ndarray) -> np.ndarray:
-    new_matrix = matrix.copy()
-    size = len(new_matrix)
-    for fd in range(size):
-        for i in range(fd + 1, size):
-            scale = new_matrix[i, fd] / new_matrix[fd, fd]
-            for j in range(fd, size):
-                new_matrix[i, j] = new_matrix[fd, j] * scale - new_matrix[i, j]
-    return new_matrix
+    size = len(matrix)
+    for focus_diagonal in range(size):
+        for i in range(focus_diagonal + 1, size):
+            scale = matrix[i, focus_diagonal] / matrix[focus_diagonal, focus_diagonal]
+            for j in range(focus_diagonal, size):
+                matrix[i, j] = matrix[focus_diagonal, j] * scale - matrix[i, j]
+    return matrix
 
 
 def calculate_determinant_of_triangular_matrix(triangular_matrix: np.ndarray) -> float:
@@ -25,7 +24,7 @@ def calculate_determinant_of_triangular_matrix(triangular_matrix: np.ndarray) ->
     return product
 
 
-matrix_size = 100
+matrix_size = 350
 left_scope, right_scope = -1.0, 1.0
 
 A = create_squared_matrix(matrix_size, left_scope, right_scope)
